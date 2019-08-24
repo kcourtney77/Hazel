@@ -52,13 +52,18 @@ namespace Hazel {
 
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
-
+		uint32_t count = 0;
+		for(auto a : m_VertexBuffers)
+		{
+			count += a->GetLayout()->GetElements().size();
+		}
+		
 		uint32_t index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index,
+			glEnableVertexAttribArray(index + count);
+			glVertexAttribPointer(index + count,
 				element.GetComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
